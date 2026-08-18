@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 
-const ICONS = ["🏮", "🐇", "🥮", "🌕", "🍃", "☕"];
-const DECK = [...ICONS, ...ICONS].sort(() => Math.random() - 0.5);
+const ICONS = ["🏮", "🐇", "🥮", "🌕", "🍃", "☕", "🍵", "⭐"];
 
 export function FindThePair({ onWin }: { onWin: () => void }) {
-  const [cards, setCards] = useState<{ icon: string; isFlipped: boolean; isMatched: boolean }[]>(
-    DECK.map(icon => ({ icon, isFlipped: false, isMatched: false }))
-  );
+  const [cards, setCards] = useState<{ icon: string; isFlipped: boolean; isMatched: boolean }[]>(() => {
+    const deck = [...ICONS, ...ICONS].sort(() => Math.random() - 0.5);
+    return deck.map(icon => ({ icon, isFlipped: false, isMatched: false }));
+  });
   const [flippedIndices, setFlippedIndices] = useState<number[]>([]);
   const [matches, setMatches] = useState(0);
 

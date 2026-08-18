@@ -1,20 +1,51 @@
 import { useState, useRef, useEffect } from 'react';
 
-const SHAPES = [
-  { id: 1, name: 'Loop', color: '#ef9f5dff', targetX: 90, targetY: 0, style: { width: '20px', height: '20px', borderRadius: '50%' } },
-  { id: 2, name: 'Top Cap', color: '#ef4444', targetX: 50, targetY: 20, style: { width: '100px', height: '30px', clipPath: 'polygon(20% 0, 80% 0, 100% 100%, 0 100%)' } },
-  { id: 3, name: 'Upper Body', color: '#ef4444', targetX: 30, targetY: 50, style: { width: '140px', height: '60px', clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 80%)' } },
-  { id: 4, name: 'Lower Body', color: '#ef4444', targetX: 30, targetY: 98, style: { width: '140px', height: '60px', clipPath: 'polygon(0 0, 100% 20%, 80% 100%, 20% 100%)' } },
-  { id: 5, name: 'String', color: '#eab308', targetX: 96, targetY: 158, style: { width: '8px', height: '30px' } },
-  { id: 6, name: 'Knot', color: '#eab308', targetX: 85, targetY: 188, style: { width: '30px', height: '30px', clipPath: 'polygon(50% 0, 100% 50%, 50% 100%, 0 50%)' } },
-  { id: 7, name: 'Fringe', color: '#ef4444', targetX: 70, targetY: 218, style: { width: '60px', height: '40px', clipPath: 'polygon(0 0, 100% 0, 50% 100%)' } },
+const PUZZLE_BANK = [
+  [ // Lantern
+    { id: 1, name: 'Loop', color: '#ef9f5dff', targetX: 90, targetY: 0, style: { width: '20px', height: '20px', borderRadius: '50%' } },
+    { id: 2, name: 'Top Cap', color: '#ef4444', targetX: 50, targetY: 20, style: { width: '100px', height: '30px', clipPath: 'polygon(20% 0, 80% 0, 100% 100%, 0 100%)' } },
+    { id: 3, name: 'Upper Body', color: '#ef4444', targetX: 30, targetY: 50, style: { width: '140px', height: '60px', clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 80%)' } },
+    { id: 4, name: 'Lower Body', color: '#ef4444', targetX: 30, targetY: 98, style: { width: '140px', height: '60px', clipPath: 'polygon(0 0, 100% 20%, 80% 100%, 20% 100%)' } },
+    { id: 5, name: 'String', color: '#eab308', targetX: 96, targetY: 158, style: { width: '8px', height: '30px' } },
+    { id: 6, name: 'Knot', color: '#eab308', targetX: 85, targetY: 188, style: { width: '30px', height: '30px', clipPath: 'polygon(50% 0, 100% 50%, 50% 100%, 0 50%)' } },
+    { id: 7, name: 'Fringe', color: '#ef4444', targetX: 70, targetY: 218, style: { width: '60px', height: '40px', clipPath: 'polygon(0 0, 100% 0, 50% 100%)' } },
+  ],
+  [ // Teacup
+    { id: 1, name: 'Cup Body', color: '#ef9f5dff', targetX: 50, targetY: 100, style: { width: '100px', height: '60px', borderRadius: '0 0 50px 50px' } },
+    { id: 2, name: 'Handle', color: '#ef9f5dff', targetX: 130, targetY: 110, style: { width: '30px', height: '30px', borderRadius: '50%', border: '5px solid #ef9f5dff', background: 'transparent' } },
+    { id: 3, name: 'Base', color: '#ef4444', targetX: 70, targetY: 160, style: { width: '60px', height: '15px', borderRadius: '5px' } },
+    { id: 4, name: 'Steam 1', color: '#eab308', targetX: 80, targetY: 60, style: { width: '10px', height: '30px', borderRadius: '50%', opacity: 0.5 } },
+    { id: 5, name: 'Steam 2', color: '#eab308', targetX: 110, targetY: 50, style: { width: '10px', height: '40px', borderRadius: '50%', opacity: 0.5 } }
+  ],
+  [ // Moon & Cloud
+    { id: 1, name: 'Moon', color: '#fef08a', targetX: 60, targetY: 50, style: { width: '80px', height: '80px', borderRadius: '50%' } },
+    { id: 2, name: 'Cloud Base', color: '#e2e8f0', targetX: 30, targetY: 100, style: { width: '120px', height: '40px', borderRadius: '20px' } },
+    { id: 3, name: 'Cloud Puff 1', color: '#e2e8f0', targetX: 50, targetY: 80, style: { width: '50px', height: '50px', borderRadius: '50%' } },
+    { id: 4, name: 'Cloud Puff 2', color: '#e2e8f0', targetX: 90, targetY: 90, style: { width: '40px', height: '40px', borderRadius: '50%' } }
+  ],
+  [ // Jade Rabbit
+    { id: 1, name: 'Body', color: '#fff', targetX: 70, targetY: 120, style: { width: '70px', height: '50px', borderRadius: '35px 35px 20px 20px' } },
+    { id: 2, name: 'Head', color: '#fff', targetX: 40, targetY: 100, style: { width: '40px', height: '40px', borderRadius: '50%' } },
+    { id: 3, name: 'Ear 1', color: '#fca5a5', targetX: 45, targetY: 60, style: { width: '15px', height: '45px', borderRadius: '50% 50% 0 0', transform: 'rotate(-20deg)' } },
+    { id: 4, name: 'Ear 2', color: '#fca5a5', targetX: 65, targetY: 65, style: { width: '15px', height: '40px', borderRadius: '50% 50% 0 0', transform: 'rotate(10deg)' } },
+    { id: 5, name: 'Tail', color: '#fff', targetX: 130, targetY: 140, style: { width: '20px', height: '20px', borderRadius: '50%' } }
+  ],
+  [ // Star
+    { id: 1, name: 'Center', color: '#fef08a', targetX: 80, targetY: 100, style: { width: '40px', height: '40px' } },
+    { id: 2, name: 'Top Point', color: '#fef08a', targetX: 80, targetY: 60, style: { width: '40px', height: '40px', clipPath: 'polygon(50% 0, 100% 100%, 0 100%)' } },
+    { id: 3, name: 'Bottom Point', color: '#fef08a', targetX: 80, targetY: 140, style: { width: '40px', height: '40px', clipPath: 'polygon(0 0, 100% 0, 50% 100%)' } },
+    { id: 4, name: 'Left Point', color: '#fef08a', targetX: 40, targetY: 100, style: { width: '40px', height: '40px', clipPath: 'polygon(100% 0, 100% 100%, 0 50%)' } },
+    { id: 5, name: 'Right Point', color: '#fef08a', targetX: 120, targetY: 100, style: { width: '40px', height: '40px', clipPath: 'polygon(0 0, 100% 50%, 0 100%)' } }
+  ]
 ];
 
 export function TangramPuzzle({ onWin }: { onWin: () => void }) {
   const containerRef = useRef<HTMLDivElement>(null);
   
+  const [selectedPuzzle] = useState(() => PUZZLE_BANK[Math.floor(Math.random() * PUZZLE_BANK.length)]);
+  
   const [pieces, setPieces] = useState(() => 
-    SHAPES.map(s => ({
+    selectedPuzzle.map(s => ({
       ...s,
       x: Math.random() * 150 + 20, // Random scatter horizontally
       y: Math.random() * 100 + 320, // Random scatter below the silhouette
@@ -73,7 +104,7 @@ export function TangramPuzzle({ onWin }: { onWin: () => void }) {
 
   return (
     <div className="glass-panel animate-fade-in" style={{ textAlign: 'center', userSelect: 'none', touchAction: 'none' }}>
-      <h3 style={{ marginBottom: '1rem' }}>Assemble the Lantern</h3>
+      <h3 style={{ marginBottom: '1rem' }}>Assemble the Shape</h3>
       <p style={{ color: 'var(--color-text-muted)' }}>Drag the pieces to fit the silhouette.</p>
       
       {/* Puzzle Container */}
@@ -95,7 +126,7 @@ export function TangramPuzzle({ onWin }: { onWin: () => void }) {
           borderRadius: '20px',
           zIndex: 0
         }}>
-          {SHAPES.map(s => (
+          {selectedPuzzle.map(s => (
             <div 
               key={`shadow-${s.id}`} 
               style={{
@@ -131,7 +162,7 @@ export function TangramPuzzle({ onWin }: { onWin: () => void }) {
 
       {isComplete && (
         <p style={{ color: 'var(--color-accent)', fontWeight: 'bold' }} className="animate-fade-in glow-pulse">
-          Lantern Complete!
+          Puzzle Complete!
         </p>
       )}
     </div>

@@ -1,53 +1,18 @@
 import { useState } from 'react';
 
-interface Question {
-  q: string;
-  options: string[];
-  answer: number;
-  note: string;
-}
-
-const QUESTIONS: Question[] = [
-  {
-    q: "Who is the Moon Goddess in Chinese mythology?",
-    options: ["Guan Yin", "Nuwa", "Chang'e", "Mazu"],
-    answer: 2,
-    note: "Chang'e drank the elixir of immortality and floated to the moon."
-  },
-  {
-    q: "Why are pomelos eaten during the festival?",
-    options: ["They are sweet", "Their name sounds like 'blessing'", "They are round like the moon", "They keep away evil spirits"],
-    answer: 1,
-    note: "The Chinese word for pomelo sounds like 'to bless' or 'to protect'."
-  },
-  {
-    q: "What do lanterns symbolize?",
-    options: ["Lighting the path to prosperity", "Scaring away the Nian monster", "Guiding the spirits home", "Welcoming the harvest"],
-    answer: 0,
-    note: "Lanterns are lit to symbolize lighting the path to prosperity and good fortune."
-  },
-  {
-    q: "Why is the festival on the 15th day of the 8th month?",
-    options: ["It is the harvest season", "The moon is at its brightest and roundest", "It marks the middle of autumn", "All of the above"],
-    answer: 3,
-    note: "The 15th of the 8th lunar month coincides with the harvest, mid-autumn, and the brightest full moon."
-  },
-  {
-    q: "What is traditionally hidden inside mooncakes?",
-    options: ["Coins", "Messages", "Salted Egg Yolks", "Red Beans"],
-    answer: 2,
-    note: "The salted egg yolk in the center represents the full moon."
-  }
-];
+import { QUESTION_BANK, Question } from './quizData';
 
 export function FestivalQuiz({ onWin }: { onWin: () => void }) {
+  const [questions] = useState<Question[]>(() => 
+    [...QUESTION_BANK].sort(() => 0.5 - Math.random()).slice(0, 5)
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [showNote, setShowNote] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
 
   const handleAnswer = (index: number) => {
-    if (index === QUESTIONS[currentIndex].answer) {
+    if (index === questions[currentIndex].answer) {
       setScore(s => s + 1);
     }
     setShowNote(true);
@@ -55,7 +20,7 @@ export function FestivalQuiz({ onWin }: { onWin: () => void }) {
 
   const handleNext = () => {
     setShowNote(false);
-    if (currentIndex < QUESTIONS.length - 1) {
+    if (currentIndex < questions.length - 1) {
       setCurrentIndex(i => i + 1);
     } else {
       setIsFinished(true);
@@ -87,7 +52,7 @@ export function FestivalQuiz({ onWin }: { onWin: () => void }) {
     );
   }
 
-  const currentQ = QUESTIONS[currentIndex];
+  const currentQ = questions[currentIndex];
 
   return (
     <div className="glass-panel animate-fade-in">
