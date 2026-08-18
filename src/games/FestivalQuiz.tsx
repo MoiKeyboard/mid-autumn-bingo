@@ -75,7 +75,7 @@ export function FestivalQuiz({ onWin }: { onWin: () => void }) {
           </>
         ) : (
           <>
-            <p style={{ color: '#ef4444' }}>You need 3 correct to pass.</p>
+            <p style={{ color: '#ef4444' }}>You need 5 correct to pass.</p>
             <button onClick={() => {
               setCurrentIndex(0);
               setScore(0);
