@@ -1,3 +1,5 @@
+import type * as tfTypes from '@tensorflow/tfjs';
+
 // Dynamically import tfjs to prevent it from bloating the main bundle
 let tf: typeof import('@tensorflow/tfjs') | null = null;
 let model: any = null; // using any since tf.GraphModel isn't available until import
@@ -35,8 +37,8 @@ export const verifyImage = async (imageElement: HTMLImageElement, promptId: 'rou
     .expandDims(0)
     .div(255.0); // Normalize to 0-1
 
-  const predictions = net.predict(tensor) as tf.Tensor;
-  const values = await predictions.data();
+  const predictions = net.predict(tensor) as tfTypes.Tensor;
+  const values = await predictions.data() as Float32Array;
   
   // Cleanup tensors to prevent memory leaks
   tensor.dispose();
@@ -44,7 +46,7 @@ export const verifyImage = async (imageElement: HTMLImageElement, promptId: 'rou
 
   // Find the top 3 predictions
   const topIndices = Array.from(values)
-    .map((prob, index) => ({ prob, index }))
+    .map((prob, index) => ({ prob: prob as number, index }))
     .sort((a, b) => b.prob - a.prob)
     .slice(0, 3);
     
