@@ -74,23 +74,15 @@ npm run dev
 
 ## ☁️ Deployment (GCP Cloud Run)
 
-This application is configured for seamless deployment to Google Cloud Run.
+This application features a fully automated, **Zero-Secrets CI/CD Pipeline** powered by GitHub Actions and Google Cloud Workload Identity Federation (WIF).
 
-1. **Build and push to Artifact Registry:**
-   ```bash
-   gcloud builds submit --tag gcr.io/[PROJECT-ID]/mid-autumn-bingo
-   ```
-2. **Deploy to Cloud Run:**
-   ```bash
-   gcloud run deploy mid-autumn-bingo \
-     --image gcr.io/[PROJECT-ID]/mid-autumn-bingo \
-     --platform managed \
-     --region [REGION] \
-     --allow-unauthenticated \
-     --port 8080
-   ```
+### How it works
+1. **Push to `main`**: Any code pushed to the `main` branch automatically triggers the `.github/workflows/deploy.yml` pipeline.
+2. **Zero-Trust Auth**: The pipeline securely authenticates to Google Cloud using a hardcoded WIF Provider, eliminating the need to store sensitive Service Account JSON keys in GitHub Secrets.
+3. **Build & Push**: The Docker container is built and pushed to the `asia-southeast1` Artifact Registry.
+4. **Deploy**: The latest image is instantly rolled out to the serverless Cloud Run instance.
 
----
+No manual `gcloud` commands or secret management required!
 
 ## 🛠️ Development Architecture
 
@@ -102,3 +94,13 @@ This application is configured for seamless deployment to Google Cloud Run.
 <div align="center">
   <p>Built for the Mid-Autumn Festival 2026</p>
 </div>
+
+---
+
+## 🤝 Contributing
+
+Contributions are always welcome! Since this is an open-source project, please feel free to fork the repository, open a pull request, or submit issues if you find bugs or want to add new minigames.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
