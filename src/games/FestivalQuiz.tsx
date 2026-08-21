@@ -4,7 +4,7 @@ import { QUESTION_BANK, Question } from './quizData';
 
 export function FestivalQuiz({ onWin }: { onWin: () => void }) {
   const [questions] = useState<Question[]>(() => 
-    [...QUESTION_BANK].sort(() => 0.5 - Math.random()).slice(0, 5)
+    [...QUESTION_BANK].sort(() => 0.5 - Math.random()).slice(0, 3)
   );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -28,11 +28,11 @@ export function FestivalQuiz({ onWin }: { onWin: () => void }) {
   };
 
   if (isFinished) {
-    const passed = score >= 5;
+    const passed = score >= 3;
     return (
       <div className="glass-panel" style={{ textAlign: 'center' }}>
         <h3>Quiz Finished!</h3>
-        <p>You scored {score} out of 5.</p>
+        <p>You scored {score} out of 3.</p>
         {passed ? (
           <>
             <p style={{ color: '#22c55e', fontWeight: 'bold' }}>You passed!</p>
@@ -40,7 +40,7 @@ export function FestivalQuiz({ onWin }: { onWin: () => void }) {
           </>
         ) : (
           <>
-            <p style={{ color: '#ef4444' }}>You need 5 correct to pass.</p>
+            <p style={{ color: '#ef4444' }}>You need 3 correct to pass.</p>
             <button onClick={() => {
               setCurrentIndex(0);
               setScore(0);
@@ -57,7 +57,7 @@ export function FestivalQuiz({ onWin }: { onWin: () => void }) {
   return (
     <div className="glass-panel animate-fade-in">
       <div style={{ marginBottom: '1rem', color: 'var(--color-text-muted)' }}>
-        Question {currentIndex + 1} of 5
+        Question {currentIndex + 1} of 3
       </div>
       <h3 style={{ marginBottom: '1.5rem' }}>{currentQ.q}</h3>
       

@@ -1,13 +1,25 @@
 import { useState, useRef, useEffect } from 'react';
 import { verifyImage, loadModel } from '../utils/vision';
 
-const PROMPTS = [
-  { id: 'round', text: "Something Round (like the Moon)" },
-  { id: 'jade', text: "Something Jade-colored" },
-  { id: 'shadow', text: "Something that casts a distinct Shadow" }
+const PROMPT_BANK = [
+  { id: 'round', text: "Find something round like the Full Moon" },
+  { id: 'companion', text: "Find a Festival Companion" },
+  { id: 'lantern', text: "Find a modern 'Lantern'" },
+  { id: 'flora', text: "Find some nature or greenery" },
+  { id: 'feast', text: "Find festival food or something to eat" },
+  { id: 'utensil', text: "Find something used to eat mooncakes or drink tea" },
+  { id: 'transport', text: "Find a vehicle to travel to the lantern festival" },
+  { id: 'comfort', text: "Find a cozy place to sit and moon-gaze" },
+  { id: 'knowledge', text: "Find something to read festival poems from" },
+  { id: 'accessory', text: "Find an accessory to bring to an outdoor festival" }
 ] as const;
 
+export type PromptId = typeof PROMPT_BANK[number]['id'];
+
 export function MoonPhotoHunt({ onWin }: { onWin: () => void }) {
+  const [prompts] = useState(() => 
+    [...PROMPT_BANK].sort(() => 0.5 - Math.random()).slice(0, 3)
+  );
   const [currentPromptIdx, setCurrentPromptIdx] = useState(0);
   const [isModelLoading, setIsModelLoading] = useState(true);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -34,11 +46,11 @@ export function MoonPhotoHunt({ onWin }: { onWin: () => void }) {
     // Slight delay to make the "scanning" feel real
     await new Promise(r => setTimeout(r, 1000));
     
-    const isValid = await verifyImage(imgRef.current, PROMPTS[currentPromptIdx].id);
+    const isValid = await verifyImage(imgRef.current, prompts[currentPromptIdx].id);
     setIsAnalyzing(false);
 
     if (isValid) {
-      if (currentPromptIdx < PROMPTS.length - 1) {
+      if (currentPromptIdx < prompts.length - 1) {
         setCurrentPromptIdx(i => i + 1);
         setImageSrc(null);
       } else {
@@ -58,7 +70,7 @@ export function MoonPhotoHunt({ onWin }: { onWin: () => void }) {
     );
   }
 
-  const prompt = PROMPTS[currentPromptIdx];
+  const prompt = prompts[currentPromptIdx];
 
   return (
     <div className="glass-panel animate-fade-in" style={{ textAlign: 'center' }}>

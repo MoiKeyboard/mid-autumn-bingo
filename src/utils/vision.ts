@@ -1,4 +1,5 @@
 import '@tensorflow/tfjs';
+import { PromptId } from '../games/MoonPhotoHunt';
 
 // Dynamically import coco-ssd to prevent bloating main bundle
 let cocoSsd: typeof import('@tensorflow-models/coco-ssd') | null = null;
@@ -17,7 +18,7 @@ export const loadModel = async () => {
   return model;
 };
 
-export const verifyImage = async (imageElement: HTMLImageElement, promptId: 'round' | 'jade' | 'shadow'): Promise<boolean> => {
+export const verifyImage = async (imageElement: HTMLImageElement, promptId: PromptId): Promise<boolean> => {
   const net = await loadModel();
   
   // COCO-SSD handles all the tensor conversion and resizing internally!
@@ -25,10 +26,17 @@ export const verifyImage = async (imageElement: HTMLImageElement, promptId: 'rou
   const predictions = await net.detect(imageElement);
   
   // Festival-friendly keyword mapping for COCO-SSD's 80 classes
-  const keywords = {
-    round: ['apple', 'orange', 'sports ball', 'bowl', 'cup', 'clock', 'donut', 'pizza', 'cake'],
-    jade: ['potted plant', 'broccoli', 'apple', 'kite'],
-    shadow: ['person', 'umbrella', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow'] // Things that cast distinct silhouettes
+  const keywords: Record<PromptId, string[]> = {
+    round: ['apple', 'orange', 'sports ball', 'bowl', 'cup', 'clock', 'donut', 'pizza', 'cake', 'vase'],
+    companion: ['person', 'cat', 'dog', 'bird', 'horse', 'sheep', 'cow'],
+    lantern: ['tv', 'laptop', 'cell phone', 'microwave', 'oven'],
+    flora: ['potted plant', 'broccoli', 'carrot', 'apple', 'banana', 'orange'],
+    feast: ['pizza', 'hot dog', 'cake', 'donut', 'sandwich', 'apple', 'banana', 'orange', 'carrot', 'broccoli'],
+    utensil: ['cup', 'wine glass', 'bottle', 'fork', 'knife', 'spoon', 'bowl'],
+    transport: ['car', 'bicycle', 'motorcycle', 'bus', 'train', 'truck', 'boat', 'airplane'],
+    comfort: ['chair', 'couch', 'bed', 'bench'],
+    knowledge: ['book', 'laptop', 'cell phone', 'tv'],
+    accessory: ['umbrella', 'backpack', 'handbag', 'tie', 'suitcase']
   };
 
   const targetWords = keywords[promptId];
