@@ -2,8 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { verifyImage, loadModel } from '../utils/vision';
 
 const PROMPT_BANK = [
-  { id: 'rabbit', text: "Find a Rabbit (or something that looks like one!)" },
-  { id: 'mooncake', text: "Find a Mooncake (or a round baked pastry!)" }
+  { id: 'rabbit', text: "I am the animal that represents the festival. Find me!" },
+  { id: 'mooncake', text: "I am the traditional pastry of the festival. Find me!" }
 ] as const;
 
 export type PromptId = typeof PROMPT_BANK[number]['id'];
