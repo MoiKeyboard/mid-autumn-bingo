@@ -2,25 +2,18 @@ import { useState, useRef, useEffect } from 'react';
 import { verifyImage, loadModel } from '../utils/vision';
 
 const PROMPT_BANK = [
-  { id: 'round', text: "Find something round like the Full Moon" },
-  { id: 'companion', text: "Find a Festival Companion" },
-  { id: 'lantern', text: "Find a modern 'Lantern'" },
-  { id: 'flora', text: "Find some nature or greenery" },
-  { id: 'feast', text: "Find festival food or something to eat" },
-  { id: 'utensil', text: "Find something used to eat mooncakes or drink tea" },
-  { id: 'transport', text: "Find a vehicle to travel to the lantern festival" },
-  { id: 'comfort', text: "Find a cozy place to sit and moon-gaze" },
-  { id: 'knowledge', text: "Find something to read festival poems from" },
-  { id: 'accessory', text: "Find an accessory to bring to an outdoor festival" }
+  { id: 'rabbit', text: "Find a Rabbit (or something that looks like one!)" },
+  { id: 'mooncake', text: "Find a Mooncake (or a round baked pastry!)" }
 ] as const;
 
 export type PromptId = typeof PROMPT_BANK[number]['id'];
 
 export function MoonPhotoHunt({ onWin }: { onWin: () => void }) {
-  const [prompts] = useState(() => 
-    [...PROMPT_BANK].sort(() => 0.5 - Math.random()).slice(0, 3)
+  // Select exactly ONE prompt randomly on component mount
+  const [prompt] = useState(() => 
+    PROMPT_BANK[Math.floor(Math.random() * PROMPT_BANK.length)]
   );
-  const [currentPromptIdx, setCurrentPromptIdx] = useState(0);
+  
   const [isModelLoading, setIsModelLoading] = useState(true);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -46,16 +39,11 @@ export function MoonPhotoHunt({ onWin }: { onWin: () => void }) {
     // Slight delay to make the "scanning" feel real
     await new Promise(r => setTimeout(r, 1000));
     
-    const isValid = await verifyImage(imgRef.current, prompts[currentPromptIdx].id);
+    const isValid = await verifyImage(imgRef.current, prompt.id);
     setIsAnalyzing(false);
 
     if (isValid) {
-      if (currentPromptIdx < prompts.length - 1) {
-        setCurrentPromptIdx(i => i + 1);
-        setImageSrc(null);
-      } else {
-        onWin();
-      }
+      onWin(); // Immediately win after the single successful capture
     } else {
       alert("Hmm, that doesn't look quite right to the AI. Try again!");
       setImageSrc(null);
@@ -70,13 +58,11 @@ export function MoonPhotoHunt({ onWin }: { onWin: () => void }) {
     );
   }
 
-  const prompt = prompts[currentPromptIdx];
-
   return (
     <div className="glass-panel animate-fade-in" style={{ textAlign: 'center' }}>
       <h3 style={{ marginBottom: '1rem' }}>Moon Photo Hunt</h3>
-      <p style={{ color: 'var(--color-text-muted)' }}>Find and capture:</p>
-      <h4 style={{ fontSize: '1.2rem', color: 'var(--color-accent)' }}>{prompt.text}</h4>
+      <p style={{ color: 'var(--color-text-muted)' }}>Your mission is to find and capture:</p>
+      <h4 style={{ fontSize: '1.2rem', color: 'var(--color-accent)', margin: '1rem 0' }}>{prompt.text}</h4>
 
       {!imageSrc ? (
         <div style={{ marginTop: '2rem' }}>
@@ -114,10 +100,6 @@ export function MoonPhotoHunt({ onWin }: { onWin: () => void }) {
           </div>
         </div>
       )}
-      
-      <p style={{ marginTop: '1rem', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
-        Progress: {currentPromptIdx} / 3
-      </p>
     </div>
   );
 }
