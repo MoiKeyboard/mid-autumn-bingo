@@ -19,7 +19,7 @@ Built for the **Mid-Autumn Festival 2026**, this interactive microsite gamifies 
 ### ✨ Key Features
 
 - **📱 Offline First & Stateless**: No backend database required. User progress is securely saved in the browser's `localStorage`, preventing data loss upon accidental reloads.
-- **🧠 Edge AI Vision**: The "Moon Photo Hunt" utilizes a client-side **TensorFlow.js MobileNet V3** model to verify photos instantly within the browser, ensuring privacy and eliminating server compute costs.
+- **🧠 Edge AI Vision**: The "Moon Photo Hunt" utilizes a client-side **TensorFlow.js MobileNet** model to verify photos instantly within the browser, ensuring privacy and eliminating server compute costs.
 - **🎨 Premium Aesthetics**: Designed with modern UI/UX principles featuring a dark glassmorphism theme, smooth micro-animations, and vibrant gold accents.
 - **🐳 Cloud-Ready**: Fully containerized using a multi-stage Docker build with Nginx, ready for zero-config deployment to GCP Cloud Run.
 
@@ -30,10 +30,10 @@ Built for the **Mid-Autumn Festival 2026**, this interactive microsite gamifies 
 The Bingo grid features 9 minigames. Players must complete any row, column, or diagonal to win.
 
 ### 🌐 Online Games (Auto-stamped)
-1. **Tangram Puzzle**: A drag-and-drop geometric puzzle to assemble a lantern silhouette.
-2. **Festival Quiz**: A multiple-choice trivia challenge about Mid-Autumn lore.
-3. **Find the Pair**: A classic memory matching card game.
-4. **Moon Photo Hunt**: An AI-powered scavenger hunt that uses device cameras to detect round or jade-colored objects.
+1. **Tangram Puzzle**: A drag-and-drop geometric puzzle to assemble a randomly selected festival silhouette (Lantern, Teacup, Moon, Rabbit, or Star).
+2. **Festival Quiz**: A multiple-choice trivia challenge that serves 5 random questions from a bank of 30.
+3. **Find the Pair**: A classic 4x4 memory matching card game.
+4. **Moon Photo Hunt**: An AI-powered scavenger hunt that uses device cameras and Keyword Mapping to verify if a player has successfully captured a Rabbit or a Mooncake.
 
 ### 🎪 Offline Games (Admin-stamped)
 *Completed in person and stamped via an Admin PIN.*
