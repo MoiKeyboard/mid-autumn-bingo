@@ -23,7 +23,8 @@ export const verifyImage = async (imageElement: HTMLImageElement, promptId: Prom
   // Keyword Mapping to map MobileNet's 1000 classes to our custom 2 targets
   const keywords: Record<PromptId, string[]> = {
     rabbit: ['hare', 'wood rabbit', 'Angora', 'rabbit'],
-    mooncake: ['potpie', 'bakery', 'bagel', 'dough', 'French loaf', 'meat loaf', 'puck', 'pretzel', 'bun', 'bread']
+    lantern: ['paper lantern', 'lampshade', 'table lamp', 'street lamp', 'candle', 'torch', 'beacon', 'spotlight', 'lamp'],
+    teacup: ['teacup', 'teapot', 'mug', 'coffee mug', 'cup', 'goblet', 'pitcher', 'jug']
   };
 
   const targetWords = keywords[promptId];

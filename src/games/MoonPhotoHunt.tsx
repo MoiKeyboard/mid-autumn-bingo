@@ -3,7 +3,8 @@ import { verifyImage, loadModel } from '../utils/vision';
 
 const PROMPT_BANK = [
   { id: 'rabbit', text: "I am the animal that represents the festival. Find me!" },
-  { id: 'mooncake', text: "I am the traditional pastry of the festival. Find me!" }
+  { id: 'lantern', text: "I bring light to the dark autumn night. Find me!" },
+  { id: 'teacup', text: "I am traditionally brewed to pair with sweet mooncakes. Find me!" }
 ] as const;
 
 export type PromptId = typeof PROMPT_BANK[number]['id'];
