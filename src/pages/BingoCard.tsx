@@ -31,7 +31,7 @@ export function BingoCard({ user, onReset }: { user: any, onReset: () => void })
   const [completed, setCompleted] = useState<GameId[]>([]);
   const [activeOfflineGame, setActiveOfflineGame] = useState<GameId | null>(null);
   const [activeOnlineGame, setActiveOnlineGame] = useState<GameId | null>(null);
-  const [hasWon, setHasWon] = useState(false);
+  const [linesCompleted, setLinesCompleted] = useState(0);
 
   // Load state on mount
   useEffect(() => {
@@ -41,9 +41,7 @@ export function BingoCard({ user, onReset }: { user: any, onReset: () => void })
 
   // Check win condition whenever completed changes
   useEffect(() => {
-    if (checkWinCondition(completed, FIXED_GRID)) {
-      setHasWon(true);
-    }
+    setLinesCompleted(checkWinCondition(completed, FIXED_GRID));
   }, [completed]);
 
   const handleTileClick = (gameId: GameId) => {
@@ -78,10 +76,16 @@ export function BingoCard({ user, onReset }: { user: any, onReset: () => void })
         </button>
       </header>
 
-      {hasWon && (
+      {linesCompleted > 0 && (
         <div className="glass-panel animate-fade-in glow-pulse" style={{ marginBottom: '2rem', textAlign: 'center', border: '1px solid var(--color-accent)' }}>
-          <h2 style={{ fontSize: '2rem', margin: '0 0 10px 0' }}>BINGO!</h2>
-          <p style={{ margin: 0 }}>Congratulations! Show this screen to claim your prize.</p>
+          <h2 style={{ fontSize: '2rem', margin: '0 0 10px 0' }}>
+            {linesCompleted >= 2 ? 'DOUBLE BINGO!' : 'BINGO!'}
+          </h2>
+          <p style={{ margin: 0, fontWeight: 500 }}>
+            {linesCompleted >= 2 
+              ? 'Congratulations! You have completed 2 lines and unlocked the Tier 2 Prize! Show this screen to claim it.' 
+              : 'Congratulations! You have completed 1 line and unlocked the Tier 1 Prize! Keep playing to complete a 2nd line for the Tier 2 Prize!'}
+          </p>
         </div>
       )}
 

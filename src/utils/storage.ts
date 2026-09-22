@@ -35,18 +35,20 @@ export const isGameComplete = (gameId: GameId): boolean => {
   return state.completedGames.includes(gameId);
 };
 
-export const checkWinCondition = (completed: GameId[], grid: GameId[][]): boolean => {
+export const checkWinCondition = (completed: GameId[], grid: GameId[][]): number => {
+  let lines = 0;
+
   // Check rows
   for (let i = 0; i < 3; i++) {
-    if (grid[i].every(game => completed.includes(game))) return true;
+    if (grid[i].every(game => completed.includes(game))) lines++;
   }
   // Check columns
   for (let j = 0; j < 3; j++) {
-    if (grid.every(row => completed.includes(row[j]))) return true;
+    if (grid.every(row => completed.includes(row[j]))) lines++;
   }
   // Check diagonals
-  if (completed.includes(grid[0][0]) && completed.includes(grid[1][1]) && completed.includes(grid[2][2])) return true;
-  if (completed.includes(grid[0][2]) && completed.includes(grid[1][1]) && completed.includes(grid[2][0])) return true;
+  if (completed.includes(grid[0][0]) && completed.includes(grid[1][1]) && completed.includes(grid[2][2])) lines++;
+  if (completed.includes(grid[0][2]) && completed.includes(grid[1][1]) && completed.includes(grid[2][0])) lines++;
   
-  return false;
+  return lines;
 };
