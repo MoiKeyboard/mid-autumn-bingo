@@ -84,6 +84,26 @@ This application features a fully automated, **Zero-Secrets CI/CD Pipeline** pow
 
 No manual `gcloud` commands or secret management required!
 
+## Deployment (GitHub Pages)
+
+GitHub Pages is an additional static hosting option. The application source, Vite configuration, Docker image, and existing GCP workflow remain unchanged.
+
+1. In the repository's **Settings > Pages**, select **GitHub Actions** as the build and deployment source.
+2. Merge `.github/workflows/pages.yml` into `main`. Pushes to `main` then deploy to both GitHub Pages and GCP independently. You can also run **Deploy to GitHub Pages** manually from the Actions tab on `main`.
+3. Open <https://MoiKeyboard.github.io/mid-autumn-bingo/> once the Pages deployment finishes.
+
+The Pages workflow builds with Vite's `--base` flag using the path provided by GitHub Pages, then publishes `dist`. This keeps the default build behavior used by GCP unchanged. No GCP credentials are used by the Pages workflow.
+
+To build the repository-path version locally:
+
+```bash
+npm install --no-package-lock
+npm run build -- --base /mid-autumn-bingo/
+npm run preview -- --base /mid-autumn-bingo/ --host 127.0.0.1
+```
+
+Open `http://127.0.0.1:4173/mid-autumn-bingo/`. Player progress is stored per browser origin, so existing progress on the GCP site is not shared with GitHub Pages. The photo game still requires camera permission, and its AI model and web fonts require an internet connection.
+
 ## 🛠️ Development Architecture
 
 - `src/games/`: Contains the individual React components for each online minigame.
